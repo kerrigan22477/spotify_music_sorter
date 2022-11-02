@@ -23,5 +23,6 @@ urlpatterns = [
     # when any url is entered ('' does this) send to api.urls.py file
     # when 'api/' + the info included in the 'home/' in api.urls
     # then it redirects to main func page
-    path('api/', include('api.urls'))
+    path('api/', include('api.urls')),
+    path('', include('frontend.urls'))
 ]
