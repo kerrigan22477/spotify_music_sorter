@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RoomJoinPage from './RoomJoinPage';
 import CreateRoomPage from './CreateRoomPage';
+import Room from './Room';
 import { 
     BrowserRouter as Router,
     Routes,
@@ -25,13 +26,19 @@ export default class HomePage extends Component {
     in django, add it in frontend/urls.py
     */
 
+    // if you have a colon in the path, that means there will be a variable
+    // in our code, the varaible is roomCode
+    // Route by default gives us some info about the path, it gives us 
+    // match, which gives us access to the parameters for the url in the path
+
     render() {
         return (
             <Router>
                 <Routes>
-                    <Route path="/" element={<p>This is the HomePage</p>} />
+                    <Route path="/" element={<p>This is sssthe HomePage</p>} />
                     <Route path="/join/*" element={<RoomJoinPage />} />
                     <Route path="/create" element={<CreateRoomPage />} />
+                    <Route path="/room/:roomCode" element={<Room/>} />
                 </Routes>
             </Router>
         );

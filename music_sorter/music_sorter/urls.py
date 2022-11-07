@@ -24,5 +24,6 @@ urlpatterns = [
     # when 'api/' + the info included in the 'home/' in api.urls
     # then it redirects to main func page
     path('api/', include('api.urls')),
-    path('', include('frontend.urls'))
+    path('', include('frontend.urls')),
+    path('spotify/', include('spotify.urls'))
 ]
