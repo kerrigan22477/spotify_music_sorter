@@ -1,15 +1,3 @@
-
-import React, { Component } from 'react';
-export default class CreateRoomPage extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return <p>This is create room page</p>;
-    }
-}
-/*
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -38,12 +26,16 @@ export default class CreateRoomPage extends Component {
   }
 
   handleVotesChange(e) {
+    // changing state forces page to refresh and updates the data listed here
+    // setState() used for modifying state, 
+    // e.target.value gets value from object we called and uses it to change state
     this.setState({
       votesToSkip: e.target.value,
     });
   }
 
   handleGuestCanPauseChange(e) {
+    // if string is true, guestcanpause = true else false hahaha duh
     this.setState({
       guestCanPause: e.target.value === "true" ? true : false,
     });
@@ -62,6 +54,14 @@ export default class CreateRoomPage extends Component {
       .then((response) => response.json())
       .then((data) => this.props.history.push("/room/" + data.code));
   }
+    // Grid is used to align items (horizontal or vertical)
+    // default is vertically in col structure 1 = 8px between each
+
+    // item xs can be s m or l (small med large) defines screen width
+    // tells us grid width when size is small
+    // 12 means it fills the entire grid
+
+    // more info about all this jazz in notes
 
   render() {
     return (
@@ -73,7 +73,7 @@ export default class CreateRoomPage extends Component {
         </Grid>
         <Grid item xs={12} align="center">
           <FormControl component="fieldset">
-            <FormHelperText>
+            <FormHelperText component="div">
               <div align="center">Guest Control of Playback State</div>
             </FormHelperText>
             <RadioGroup
@@ -108,17 +108,13 @@ export default class CreateRoomPage extends Component {
                 style: { textAlign: "center" },
               }}
             />
-            <FormHelperText>
+            <FormHelperText component="div">
               <div align="center">Votes Required To Skip Song</div>
             </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={12} align="center">
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={this.handleRoomButtonPressed}
-          >
+          <Button color="primary" variant="contained" onClick={this.handleRoomButtonPressed}>
             Create A Room
           </Button>
         </Grid>
@@ -131,4 +127,3 @@ export default class CreateRoomPage extends Component {
     );
   }
 }
-*/
