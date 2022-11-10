@@ -68,13 +68,13 @@ export default class CreateRoomPage extends Component {
       <Grid container spacing={1}>
         <Grid item xs={12} align="center">
           <Typography component="h4" variant="h4">
-            Create A Room
+            Select Sorting Requirements
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
           <FormControl component="fieldset">
             <FormHelperText component="div">
-              <div align="center">Guest Control of Playback State</div>
+              <div align="center">Sorting Options</div>
             </FormHelperText>
             <RadioGroup
               row
@@ -84,13 +84,13 @@ export default class CreateRoomPage extends Component {
               <FormControlLabel
                 value="true"
                 control={<Radio color="primary" />}
-                label="Play/Pause"
+                label="Key"
                 labelPlacement="bottom"
               />
               <FormControlLabel
                 value="false"
                 control={<Radio color="secondary" />}
-                label="No Control"
+                label="Genre"
                 labelPlacement="bottom"
               />
             </RadioGroup>
@@ -109,13 +109,13 @@ export default class CreateRoomPage extends Component {
               }}
             />
             <FormHelperText component="div">
-              <div align="center">Votes Required To Skip Song</div>
+              <div align="center">Number of Playlists</div>
             </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={12} align="center">
           <Button color="primary" variant="contained" onClick={this.handleRoomButtonPressed}>
-            Create A Room
+            Generate
           </Button>
         </Grid>
         <Grid item xs={12} align="center">

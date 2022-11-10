@@ -10,7 +10,7 @@ import {
     Redirect,
 } from 'react-router-dom';
 
-export default class HomePage extends Component {
+/*export default class HomePage extends Component {
     constructor(props) {
         super(props);
     }
@@ -31,7 +31,9 @@ export default class HomePage extends Component {
     // Route by default gives us some info about the path, it gives us 
     // match, which gives us access to the parameters for the url in the path
 
-    render() {
+    //<Route path='room/:roomCode' component={Room} />
+
+    /*render() {
         return (
             <Router>
                 <Switch>
@@ -40,9 +42,85 @@ export default class HomePage extends Component {
                     </Route>
                     <Route path="/join" component={RoomJoinPage} />
                     <Route path="/create" component={CreateRoomPage} />
-                    <Route path='room/:roomCode' componenet={Room} />
+                    <Route path='/room/:roomCode' component={Room} />
                 </Switch>
             </Router>
         );
     }
+} */
+
+export default class HomePage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      roomCode: null,
+    };
+    this.clearRoomCode = this.clearRoomCode.bind(this);
+  }
+
+  async componentDidMount() {
+    fetch("/api/user-in-room")
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          roomCode: data.code,
+        });
+      });
+  }
+
+  renderHomePage() {
+    return (
+      <Grid container spacing={3}>
+        <Grid item xs={12} align="center">
+          <Typography variant="h3" compact="h3">
+            Spotify Playlist Creator
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <ButtonGroup disableElevation variant="contained" color="primary">
+            <Button color="primary" to="/join" component={Link}>
+              Join a Room
+            </Button>
+            <Button color="secondary" to="/create" component={Link}>
+              Create a Room
+            </Button>
+          </ButtonGroup>
+        </Grid>
+      </Grid>
+    );
+  }
+
+  clearRoomCode() {
+    this.setState({
+      roomCode: null,
+    });
+  }
+
+  render() {
+    return (
+      <Router>
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() => {
+              return this.state.roomCode ? (
+                <Redirect to={`/room/${this.state.roomCode}`} />
+              ) : (
+                this.renderHomePage()
+              );
+            }}
+          />
+          <Route path="/join" component={RoomJoinPage} />
+          <Route path="/create" component={CreateRoomPage} />
+          <Route
+            path="/room/:roomCode"
+            render={(props) => {
+              return <Room {...props} leaveRoomCallback={this.clearRoomCode} />;
+            }}
+          />
+        </Switch>
+      </Router>
+    );
+  }
 }
