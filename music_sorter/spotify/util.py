@@ -4,7 +4,9 @@ from .models import SpotifyToken
 from django.utils import timezone
 from datetime import timedelta
 from .credentials import CLIENT_SECRET, CLIENT_ID
-from requests import post
+from requests import post, put, get
+
+BASE_URL = "https://api.spotify.com/v1/me/"
 
 
 def get_user_tokens(session_id):
