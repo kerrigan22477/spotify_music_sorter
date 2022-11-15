@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import RoomJoinPage from './RoomJoinPage';
 import CreateRoomPage from './CreateRoomPage';
 import Room from './Room';
-import Generat from './Generate';
+import Generate from './Generate';
 import {
     BrowserRouter as Router,
     Switch,
