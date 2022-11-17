@@ -80,3 +80,27 @@ def refresh_spotify_token(session_id):
     refresh_token = response.get('refresh_token')
 
     update_or_create_user_tokens(session_id, access_token, token_type, expires_in, refresh_token)
+
+    # send request to spotify(use token) in util.py
+    # sesssion id = host id
+    # endpoint = what endpoint of spotify api we want
+'''
+def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
+    tokens = get_user_tokens(session_id)
+    # send authorization token to spotify
+    headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + tokens.access_token}
+
+    # send to endpoint
+    if post_:
+        post(BASE_URL + endpoint, headers=headers)
+    if put_:
+        put(BASE_URL + endpoint, headers=headers)
+
+    response = get(BASE_URL + endpoint, {}, headers=headers)
+
+    # check so we can see if there is an issue with response
+    try:
+        return response.json()
+    except:
+        return {'Error': 'Issue with request'}
+'''

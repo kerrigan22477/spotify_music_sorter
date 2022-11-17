@@ -1,6 +1,6 @@
 from ast import Is
 from django.urls import path
-from .views import AuthURL, IsAuthenticated
+from .views import *
 
 # when you enter a url, this file sends you to the correct location
 # path ('url', page)
@@ -12,5 +12,6 @@ from .views import AuthURL, IsAuthenticated
 urlpatterns = [
     path('get-auth-url', AuthURL.as_view()),
     path('redirect', AuthURL.spotify_callback),
-    path('is-authenticated', IsAuthenticated.as_view())
+    path('is-authenticated', IsAuthenticated.as_view()),
+    # path('current-song', CurrentSong.as_view())
 ]
