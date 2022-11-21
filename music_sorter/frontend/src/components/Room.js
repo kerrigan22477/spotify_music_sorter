@@ -5,6 +5,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import CreateRoomPage from "./CreateRoomPage";
+import MusicPlayer from "./MusicPlayer";
 
 export default class Room extends Component {
   constructor(props) {
@@ -25,8 +26,21 @@ export default class Room extends Component {
     this.renderSettings = this.renderSettings.bind(this);
     this.getRoomDetails = this.getRoomDetails.bind(this);
     this.authenticateSpotify = this.authenticateSpotify.bind(this);
-    //this.getCurrentSong = this.getCurrentSong.bind(this);
+    this.getCurrentSong = this.getCurrentSong.bind(this);
     this.getRoomDetails();
+  }
+
+  // componenet did mount and unmount are to regularly update current song playing
+  // info on a time interval, info we want shouldn't need this.
+
+  // calls get curr song every 1000 milli seconds
+  componentDidMount() {
+    this.interval = setInterval(this.getCurrentSong, 1000);
+  }
+
+  // stops our interval when we close the website
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   getRoomDetails() {
@@ -65,8 +79,8 @@ export default class Room extends Component {
         }
       });
   }
-  /*
   getCurrentSong() {
+    // fetch our api-endpoint (url)
     fetch("/spotify/current-song")
       .then((response) => {
         if (!response.ok) {
@@ -77,11 +91,9 @@ export default class Room extends Component {
       })
       .then((data) => {
         this.setState({ song: data });
-        console.log(data);
       });
   }
-  */
-
+  
   leaveButtonPressed() {
     const requestOptions = {
       method: "POST",
@@ -149,7 +161,9 @@ export default class Room extends Component {
             Code: {this.roomCode}
           </Typography>
         </Grid>
-        {/* {this.state.song} */}
+        { /* to pass all our song info to music player, we use the ...s to pass
+        them in as separate properties */}
+        <MusicPlayer {...this.state.song} />
         {this.state.isHost ? this.renderSettingsButton() : null}
         <Grid item xs={12} align="center">
           <Button

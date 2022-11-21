@@ -84,7 +84,8 @@ def refresh_spotify_token(session_id):
     # send request to spotify(use token) in util.py
     # sesssion id = host id
     # endpoint = what endpoint of spotify api we want
-'''
+
+
 def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
     tokens = get_user_tokens(session_id)
     # send authorization token to spotify
@@ -103,4 +104,3 @@ def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
         return response.json()
     except:
         return {'Error': 'Issue with request'}
-'''

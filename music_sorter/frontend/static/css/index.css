@@ -16,9 +16,16 @@ html, body {
 
 #app {
     width: 100%;
-    height: 100%; 
-    display: flex;
-}
+    height: 100%;
+  }
+  
+  .center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
 
 /* this style sheet is loaded by this line in our index.html file */
 /* href="{% static "css/index.css" %}" */

@@ -86,11 +86,12 @@ class IsAuthenticated(APIView):
         is_authenticated = is_spotify_authenticated(self.request.session.session_key)
         return Response({'status': is_authenticated}, status=status.HTTP_200_OK)
 
-'''
+
 class CurrentSong(APIView):
     def get(self, request, format=None):
         room_code = self.request.session.get('room_code')
 
+        # get current room by looking through all Room objects for curr code
         room = Room.objects.filter(code=room_code)
         if room.exists():
             room = room[0]
@@ -105,41 +106,44 @@ class CurrentSong(APIView):
 
         # send request to spotify(use token) in util.py
         response = execute_spotify_api_request(host, endpoint)
+        print(response)
 
         # extract specific info from response
+        # item has a key we want in response
         if 'error' in response or 'item' not in response:
             # if no song info, return nothing to frontend
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-        else:
-            item = response.get('item')
-            duration = item.get('duration_ms')
-            progress = response.get('progress_ms')
-            # a bunch of nested dictionaries
-            album_cover = item.get('album').get('images')[0].get('url')
-            is_playing = response.get('is_playing')
-            song_id = item.get('id')
+        # go through what spotify returns
+        item = response.get('item')
+        duration = item.get('duration_ms')
+        progress = response.get('progress_ms')
+        # a bunch of nested dictionaries
+        album_cover = item.get('album').get('images')[0].get('url')
+        is_playing = response.get('is_playing')
+        song_id = item.get('id')
 
-            # if multiple artists for a song, handle weird formatting
-            artist_string = ''
-            # if multiple in the list -> reformat
-            for i, artist in enumerate(item.get('artists')):
-                if i > 0:
-                    artist_string += ', '
-                name = artist.get('name')
-                artist_string += name
+        # if multiple artists for a song, handle weird formatting
+        artist_string = ''
+        # if multiple in the list -> reformat
+        for i, artist in enumerate(item.get('artists')):
+            if i > 0:
+                artist_string += ', '
+            name = artist.get('name')
+            artist_string += name
 
-            song = {
-                'title': item.get('name'),
-                'artist': artist_string,
-                'duration': duration,
-                'time': progress,
-                'image_url': album_cover,
-                'is_playing': is_playing,
-                'votes': 0,
-                'id': song_id
-            }
+        # return our custom 'song' object that we wanna send to the frontend
+        # this endpoint calls the spotify endpoint to send necessary info
+        song = {
+            'title': item.get('name'),
+            'artist': artist_string,
+            'duration': duration,
+            'time': progress,
+            'image_url': album_cover,
+            'is_playing': is_playing,
+            'votes': 0,
+            'id': song_id
+        }
 
         # send back our reformatted info from spotify
         return Response(song, status=status.HTTP_200_OK)
-'''
