@@ -17,7 +17,7 @@ export default class Room extends Component {
       showSettings: false,
       spotifyAuthenticated: false,
       // all info of current song, if it's changed component will re-render
-      song: {},
+      playlists: {},
     };
     this.roomCode = this.props.match.params.roomCode;
     this.leaveButtonPressed = this.leaveButtonPressed.bind(this);
@@ -26,7 +26,9 @@ export default class Room extends Component {
     this.renderSettings = this.renderSettings.bind(this);
     this.getRoomDetails = this.getRoomDetails.bind(this);
     this.authenticateSpotify = this.authenticateSpotify.bind(this);
-    this.getCurrentSong = this.getCurrentSong.bind(this);
+    //this.getPlaylists = this.getPlaylists.bind(this);
+    this.getPlaylists();
+    // this.getCurrentSong = this.getCurrentSong.bind(this);
     this.getRoomDetails();
   }
 
@@ -34,14 +36,18 @@ export default class Room extends Component {
   // info on a time interval, info we want shouldn't need this.
 
   // calls get curr song every 1000 milli seconds
+  /*
   componentDidMount() {
-    this.interval = setInterval(this.getCurrentSong, 1000);
+    // this.interval = setInterval(this.getCurrentSong, 10000000000000000000000);
+    //this.intervall = setInterval(this.getPlaylists, 1000);
   }
 
   // stops our interval when we close the website
   componentWillUnmount() {
-    clearInterval(this.interval);
+    // clearInterval(this.interval);
+    //clearInterval(this.intervall);
   }
+  */
 
   getRoomDetails() {
     return fetch("/api/get-room" + "?code=" + this.roomCode)
@@ -79,6 +85,7 @@ export default class Room extends Component {
         }
       });
   }
+  /*
   getCurrentSong() {
     // fetch our api-endpoint (url)
     fetch("/spotify/current-song")
@@ -91,6 +98,23 @@ export default class Room extends Component {
       })
       .then((data) => {
         this.setState({ song: data });
+      });
+  }
+  */
+
+  getPlaylists() {
+    // fetch our api-endpoint (url)
+    fetch("/spotify/playlists")
+      .then((response) => {
+        if (!response.ok) {
+          return {};
+        } else {
+          return response.json();
+        }
+      })
+      .then((data) => {
+        this.setState({ playlists: data });
+        // console.log(data);
       });
   }
   
@@ -163,8 +187,9 @@ export default class Room extends Component {
         </Grid>
         { /* to pass all our song info to music player, we use the ...s to pass
         them in as separate properties */}
-        <MusicPlayer {...this.state.song} />
+        { /*<MusicPlayer {...this.state.song} /> */}
         {this.state.isHost ? this.renderSettingsButton() : null}
+        {this.getPlaylists}
         <Grid item xs={12} align="center">
           <Button
             variant="contained"
