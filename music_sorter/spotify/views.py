@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from .util import *
 from api.models import Room
+import time
 
 # inherit from APIView
 # API end point that returns a url
@@ -173,9 +174,11 @@ class UserPlaylists(APIView):
 
         # get each playlist's data from response
         playlists = response.get('items')
+        time.sleep(.25)
 
         # get id for each playlist 
         track_ids = []
+        track_ids2 = {}
         for item in playlists:
             id = item.get('id')
 
@@ -183,23 +186,42 @@ class UserPlaylists(APIView):
             curr_playlist_endpoint = 'playlists/' + str(id) + '/tracks'
             # ask spotify for the specific playlist's songs (tracks)
             response2 = execute_spotify_api_request(host, curr_playlist_endpoint)
+            time.sleep(.15)
             # print('response2: ' + str(response2.get('items')))
 
             response3 = response2.get('items')
-            response4 = response3[0]
-            response5 = response4.get('track')
-            track_id = response5.get('id')
-            #print('response2: ' + str(track_id))
+            for song in response3:
+                response5 = song.get('track')
+                track_id = response5.get('id')
+                track_name = response5.get('name')
+                #print('response2: ' + str(track_id))
 
-            track_ids.append(track_id)
+                track_ids.append(track_id)
+                track_ids2[track_id] = track_name
 
-        for track in track_ids:
+        #for track in track_ids:
+        #print(track_ids2)
+        finalList = []
+        for id in track_ids2.keys():
+            name = track_ids2[id]
             # track_endpoint = 'tracks/' + str(track)
-            track_endpoint = 'audio-features/' + str(track)
+            track_endpoint = 'audio-features/' + str(id)
             # get track data from spotify
             response6 = execute_spotify_api_request(host, track_endpoint)
-            print('response6: ' + str(response6))
-        #print(playlist_ids)
-        
+            # need to wait for this to get called, otherwise reutrns none for all vals
+
+            song = {
+                'title': name,
+                'danceability': response6.get('danceability'),
+                'energy': response6.get('energy'),
+                'key': response6.get('key'),
+                'mode': response6.get('mode'),
+                'valence': response6.get('valence'),
+                'tempo': response6.get('tempo'),
+                'instrumentalness': response6.get('instrumentalness'),
+                'id': id
+            }
+            finalList.append(song)
+        print(finalList)
         # send back our reformatted info from spotify
         return Response(response, status=status.HTTP_200_OK)
