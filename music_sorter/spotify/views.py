@@ -190,6 +190,12 @@ class UserPlaylists(APIView):
             # print('response2: ' + str(response2.get('items')))
 
             response3 = response2.get('items')
+            response4 = response3[0]
+            response5 = response4.get('track')
+            track_id = response5.get('id')
+            track_name = response5.get('name')
+            track_ids2[track_id] = track_name
+            '''
             for song in response3:
                 response5 = song.get('track')
                 track_id = response5.get('id')
@@ -198,6 +204,7 @@ class UserPlaylists(APIView):
 
                 track_ids.append(track_id)
                 track_ids2[track_id] = track_name
+            '''
 
         #for track in track_ids:
         #print(track_ids2)
