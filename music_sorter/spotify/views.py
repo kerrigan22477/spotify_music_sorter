@@ -165,76 +165,41 @@ class UserPlaylists(APIView):
         host = room.host
 
         # end point to access spotify user's playlist data
-        endpoint = 'playlists'
+        get_playlists_endpoint = 'me/playlists'
 
         # send request to spotify(use token) in util.py
-        response = execute_spotify_api_request_playlists(host, endpoint)
+        response = execute_spotify_api_request(host, get_playlists_endpoint)
         # print(response)
 
-        playlists = []
-        print('RESPONSE: ' + str(response))
-        # this is the thing we need to fix to grab song id! 
-        item = response.get('items').get('id')
-        print('ITEMS: ' + str(item))
+        # get each playlist's data from response
+        playlists = response.get('items')
 
-        '''
-        # go through what spotify returns
-        for item in response.get('items'):
-            #print(item)
-            item = response.get('item')
-            playlist_id = item.get('id')
+        # get id for each playlist 
+        track_ids = []
+        for item in playlists:
+            id = item.get('id')
 
-        # return our custom 'song' object that we wanna send to the frontend
-        # this endpoint calls the spotify endpoint to send necessary info
-            playlist = {
-                'title': item.get('name'),
-                'id': playlist_id
-            }
-            playlists.append(playlist)
+            # endpoint to access all the tracks in a specific playlist 
+            curr_playlist_endpoint = 'playlists/' + str(id) + '/tracks'
+            # ask spotify for the specific playlist's songs (tracks)
+            response2 = execute_spotify_api_request(host, curr_playlist_endpoint)
+            # print('response2: ' + str(response2.get('items')))
 
-        print(playlists)
-        '''
+            response3 = response2.get('items')
+            response4 = response3[0]
+            response5 = response4.get('track')
+            track_id = response5.get('id')
+            #print('response2: ' + str(track_id))
+
+            track_ids.append(track_id)
+
+        for track in track_ids:
+            # track_endpoint = 'tracks/' + str(track)
+            track_endpoint = 'audio-features/' + str(track)
+            # get track data from spotify
+            response6 = execute_spotify_api_request(host, track_endpoint)
+            print('response6: ' + str(response6))
+        #print(playlist_ids)
+        
         # send back our reformatted info from spotify
         return Response(response, status=status.HTTP_200_OK)
-
-        # extract specific info from response
-        '''
-        # item has a key we want in response
-        if 'error' in response or 'item' not in response:
-            # if no song info, return nothing to frontend
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
-        '''
-
-        # go through what spotify returns
-        '''
-        item = response.get('item')
-        duration = item.get('duration_ms')
-        progress = response.get('progress_ms')
-        # a bunch of nested dictionaries
-        album_cover = item.get('album').get('images')[0].get('url')
-        is_playing = response.get('is_playing')
-        song_id = item.get('id')
-        
-
-        # if multiple artists for a song, handle weird formatting
-        artist_string = ''
-        # if multiple in the list -> reformat
-        for i, artist in enumerate(item.get('artists')):
-            if i > 0:
-                artist_string += ', '
-            name = artist.get('name')
-            artist_string += name
-
-        # return our custom 'song' object that we wanna send to the frontend
-        # this endpoint calls the spotify endpoint to send necessary info
-        song = {
-            'title': item.get('name'),
-            'artist': artist_string,
-            'duration': duration,
-            'time': progress,
-            'image_url': album_cover,
-            'is_playing': is_playing,
-            'votes': 0,
-            'id': song_id
-        }
-        '''

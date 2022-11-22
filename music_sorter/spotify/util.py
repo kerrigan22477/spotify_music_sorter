@@ -6,7 +6,7 @@ from datetime import timedelta
 from .credentials import CLIENT_SECRET, CLIENT_ID
 from requests import post, put, get
 
-BASE_URL = "https://api.spotify.com/v1/me/"
+BASE_URL = "https://api.spotify.com/v1/"
 
 
 def get_user_tokens(session_id):
@@ -86,7 +86,19 @@ def refresh_spotify_token(session_id):
     # endpoint = what endpoint of spotify api we want
 
 
-def execute_spotify_api_request_curr_song(session_id, endpoint, post_=False, put_=False):
+
+# https://api.spotify.com/v1/playlists/playlist_id
+# https://api.spotify.com/v1/users/user_id/playlists
+# https://api.spotify.com/v1/me/player/recently-played
+# https://api.spotify.com/v1/tracks/id
+# https://api.spotify.com/v1/audio-features/id
+
+# 'playlists/playlist_id'
+# 'me/playlists'
+# 'me/player/currently-playing'
+# 'tracks/track_id'
+# 'audio-features/track_id'
+def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
     # use user's unique id to get there token
     tokens = get_user_tokens(session_id)
     # send authorization token to spotify
@@ -99,26 +111,6 @@ def execute_spotify_api_request_curr_song(session_id, endpoint, post_=False, put
         put(BASE_URL + endpoint, headers=headers)
 
     response = get(BASE_URL + endpoint, {}, headers=headers)
-    # check so we can see if there is an issue with response
-    try:
-        return response.json()
-    except:
-        return {'Error': 'Issue with request'}
-
-def execute_spotify_api_request_playlists(session_id, endpoint, post_=False, put_=False):
-    # use user's unique id to get there token
-    tokens = get_user_tokens(session_id)
-    # send authorization token to spotify
-    headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + tokens.access_token}
-
-    # send to endpoint
-    if post_:
-        post(BASE_URL + endpoint, headers=headers)
-    if put_:
-        put(BASE_URL + endpoint, headers=headers)
-
-    response = get(BASE_URL + endpoint, {}, headers=headers)
-
     # check so we can see if there is an issue with response
     try:
         return response.json()
