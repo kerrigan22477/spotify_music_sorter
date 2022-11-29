@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from .util import *
 from api.models import Room
 import time
+from .sort import Sort_Songs
 
 # inherit from APIView
 # API end point that returns a url
@@ -89,70 +90,8 @@ class IsAuthenticated(APIView):
         return Response({'status': is_authenticated}, status=status.HTTP_200_OK)
 
 
-'''
-class CurrentSong(APIView):
-    def get(self, request, format=None):
-        room_code = self.request.session.get('room_code')
-
-        # get current room by looking through all Room objects for curr code
-        room = Room.objects.filter(code=room_code)
-        if room.exists():
-            room = room[0]
-        else:
-            return Response({}, status=status.HTTP_404_NOT_FOUND)
-
-        # in case user isn't the host and wants song info
-        host = room.host
-
-        # end point to access spotify currently playing data
-        endpoint = 'player/currently-playing'
-
-        # send request to spotify(use token) in util.py
-        response = execute_spotify_api_request_curr_song(host, endpoint)
-        print(response)
-
-        # extract specific info from response
-        # item has a key we want in response
-        if 'error' in response or 'item' not in response:
-            # if no song info, return nothing to frontend
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
-
-        # go through what spotify returns
-        item = response.get('item')
-        duration = item.get('duration_ms')
-        progress = response.get('progress_ms')
-        # a bunch of nested dictionaries
-        album_cover = item.get('album').get('images')[0].get('url')
-        is_playing = response.get('is_playing')
-        song_id = item.get('id')
-
-        # if multiple artists for a song, handle weird formatting
-        artist_string = ''
-        # if multiple in the list -> reformat
-        for i, artist in enumerate(item.get('artists')):
-            if i > 0:
-                artist_string += ', '
-            name = artist.get('name')
-            artist_string += name
-
-        # return our custom 'song' object that we wanna send to the frontend
-        # this endpoint calls the spotify endpoint to send necessary info
-        song = {
-            'title': item.get('name'),
-            'artist': artist_string,
-            'duration': duration,
-            'time': progress,
-            'image_url': album_cover,
-            'is_playing': is_playing,
-            'votes': 0,
-            'id': song_id
-        }
-
-        # send back our reformatted info from spotify
-        return Response(song, status=status.HTTP_200_OK)
-'''
 class UserPlaylists(APIView):
-    def get(self, request, format=None):
+    def get(self, request, format=None, sortby=''):
         room_code = self.request.session.get('room_code')
 
         # get current room by looking through all Room objects for curr code
@@ -170,7 +109,7 @@ class UserPlaylists(APIView):
 
         # send request to spotify(use token) in util.py
         response = execute_spotify_api_request(host, get_playlists_endpoint)
-        # print(response)
+        #print(response)
 
         # get each playlist's data from response
         playlists = response.get('items')
@@ -190,6 +129,7 @@ class UserPlaylists(APIView):
             # print('response2: ' + str(response2.get('items')))
 
             response3 = response2.get('items')
+            '''
             response4 = response3[0]
             response5 = response4.get('track')
             track_id = response5.get('id')
@@ -204,7 +144,7 @@ class UserPlaylists(APIView):
 
                 track_ids.append(track_id)
                 track_ids2[track_id] = track_name
-            '''
+            
 
         #for track in track_ids:
         #print(track_ids2)
@@ -229,6 +169,8 @@ class UserPlaylists(APIView):
                 'id': id
             }
             finalList.append(song)
-        print(finalList)
+        sort = Sort_Songs()
+        finalList = sort.song_sort(finalList, "key")
+        # print(finalList)
         # send back our reformatted info from spotify
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(finalList, status=status.HTTP_200_OK)

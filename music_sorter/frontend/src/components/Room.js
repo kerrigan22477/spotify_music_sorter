@@ -26,8 +26,8 @@ export default class Room extends Component {
     this.renderSettings = this.renderSettings.bind(this);
     this.getRoomDetails = this.getRoomDetails.bind(this);
     this.authenticateSpotify = this.authenticateSpotify.bind(this);
-    //this.getPlaylists = this.getPlaylists.bind(this);
-    this.getPlaylists();
+    this.getPlaylists = this.getPlaylists.bind(this);
+    // this.getPlaylists();
     // this.getCurrentSong = this.getCurrentSong.bind(this);
     this.getRoomDetails();
   }
@@ -114,7 +114,7 @@ export default class Room extends Component {
       })
       .then((data) => {
         this.setState({ playlists: data });
-        // console.log(data);
+        console.log(data);
       });
   }
   
@@ -189,7 +189,7 @@ export default class Room extends Component {
         them in as separate properties */}
         { /*<MusicPlayer {...this.state.song} /> */}
         {this.state.isHost ? this.renderSettingsButton() : null}
-        {this.getPlaylists}
+        { /* this.getPlaylists */}
         <Grid item xs={12} align="center">
           <Button
             variant="contained"

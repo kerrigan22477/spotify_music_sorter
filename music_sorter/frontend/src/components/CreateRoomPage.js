@@ -84,19 +84,13 @@ export default class CreateRoomPage extends Component {
               <FormControlLabel
                 value="true"
                 control={<Radio color="primary" />}
-                label="Key"
+                label="Play/Pause"
                 labelPlacement="bottom"
               />
               <FormControlLabel
                 value="false"
                 control={<Radio color="secondary" />}
-                label="Genre"
-                labelPlacement="bottom"
-              />
-              <FormControlLabel
-                value="false"
-                control={<Radio color="secondary" />}
-                label="BPM"
+                label="No Control"
                 labelPlacement="bottom"
               />
             </RadioGroup>
