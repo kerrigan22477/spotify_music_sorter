@@ -97,6 +97,22 @@ export default class CreateRoomPage extends Component {
           </FormControl>
         </Grid>
         <Grid item xs={12} align="center">
+          <Button color="primary" variant="contained" onClick={this.handleRoomButtonPressed}>
+            Generate
+          </Button>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Button color="secondary" variant="contained" to="/" component={Link}>
+            Back
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  }
+}
+
+/*
+      <Grid item xs={12} align="center">
           <FormControl>
             <TextField
               required={true}
@@ -113,17 +129,4 @@ export default class CreateRoomPage extends Component {
             </FormHelperText>
           </FormControl>
         </Grid>
-        <Grid item xs={12} align="center">
-          <Button color="primary" variant="contained" onClick={this.handleRoomButtonPressed}>
-            Generate
-          </Button>
-        </Grid>
-        <Grid item xs={12} align="center">
-          <Button color="secondary" variant="contained" to="/" component={Link}>
-            Back
-          </Button>
-        </Grid>
-      </Grid>
-    );
-  }
-}
+*/

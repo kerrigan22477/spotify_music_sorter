@@ -46,6 +46,8 @@ export default class Room extends Component {
         return response.json();
       })
       .then((data) => {
+        console.log('room data')
+        console.log(data)
         this.setState({
           votesToSkip: data.votes_to_skip,
           guestCanPause: data.guest_can_pause,
@@ -62,7 +64,6 @@ export default class Room extends Component {
       .then((response) => response.json())
       .then((data) => {
         this.setState({ spotifyAuthenticated: data.status });
-        console.log(data.status);
         if (!data.status) {
           fetch("/spotify/get-auth-url")
             .then((response) => response.json())
@@ -72,22 +73,6 @@ export default class Room extends Component {
         }
       });
   }
-  /*
-  getCurrentSong() {
-    // fetch our api-endpoint (url)
-    fetch("/spotify/current-song")
-      .then((response) => {
-        if (!response.ok) {
-          return {};
-        } else {
-          return response.json();
-        }
-      })
-      .then((data) => {
-        this.setState({ song: data });
-      });
-  }
-  */
 
   getPlaylists() {
     // fetch our api-endpoint (url)
@@ -137,8 +122,8 @@ export default class Room extends Component {
 
   renderSortedSongs() {
     return (
-      <TableContainer component={Paper}>
-      <Table aria-label="simple table">
+      <TableContainer style={{ maxHeight: 900 }} component={Paper}>
+      <Table stickyHeader aria-label="simple table">
           <TableHead>
           <TableRow>
               <TableCell>Song</TableCell>
