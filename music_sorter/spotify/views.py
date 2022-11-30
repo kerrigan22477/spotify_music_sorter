@@ -140,17 +140,19 @@ class UserPlaylists(APIView):
                 response5 = song.get('track')
                 track_id = response5.get('id')
                 track_name = response5.get('name')
+                track_artist = song.get('track').get('artists')[0].get('name')
                 #print('response2: ' + str(track_id))
 
                 track_ids.append(track_id)
-                track_ids2[track_id] = track_name
+                track_ids2[track_id] = [track_name, track_artist]
             
 
         #for track in track_ids:
         #print(track_ids2)
         finalList = []
         for id in track_ids2.keys():
-            name = track_ids2[id]
+            name = track_ids2[id][0]
+            artist = track_ids2[id][1]
             # track_endpoint = 'tracks/' + str(track)
             track_endpoint = 'audio-features/' + str(id)
             # get track data from spotify
@@ -159,6 +161,7 @@ class UserPlaylists(APIView):
 
             song = {
                 'title': name,
+                'artist': artist,
                 'danceability': response6.get('danceability'),
                 'energy': response6.get('energy'),
                 'key': response6.get('key'),
@@ -171,6 +174,6 @@ class UserPlaylists(APIView):
             finalList.append(song)
         sort = Sort_Songs()
         finalList = sort.song_sort(finalList, "key")
-        # print(finalList)
+
         # send back our reformatted info from spotify
         return Response(finalList, status=status.HTTP_200_OK)
