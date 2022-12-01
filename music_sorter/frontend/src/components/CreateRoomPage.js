@@ -18,11 +18,13 @@ export default class CreateRoomPage extends Component {
     this.state = {
       guestCanPause: true,
       votesToSkip: this.defaultVotes,
+      sorting_criteria: 'key'
     };
 
     this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this);
     this.handleVotesChange = this.handleVotesChange.bind(this);
     this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
+    //this.handleSortingCriteria = this.handleSortingCriteria(this);
   }
 
   handleVotesChange(e) {
@@ -37,8 +39,9 @@ export default class CreateRoomPage extends Component {
   handleGuestCanPauseChange(e) {
     // if string is true, guestcanpause = true else false hahaha duh
     this.setState({
-      guestCanPause: e.target.value === "true" ? true : false,
+      sorting_criteria: e.target.value
     });
+    console.log(this.state.sorting_criteria)
   }
 
   handleRoomButtonPressed() {
@@ -48,6 +51,7 @@ export default class CreateRoomPage extends Component {
       body: JSON.stringify({
         votes_to_skip: this.state.votesToSkip,
         guest_can_pause: this.state.guestCanPause,
+        sorting_criteria: this.state.sorting_criteria
       }),
     };
     fetch("/api/create-room", requestOptions)
@@ -72,7 +76,36 @@ export default class CreateRoomPage extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
-          <FormControl component="fieldset">
+          <FormControl>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="key"
+              name="radio-buttons-group"
+              onChange={this.handleGuestCanPauseChange}
+            >
+              <FormControlLabel value="key" control={<Radio />} label="Key" />
+              <FormControlLabel value="mode" control={<Radio />} label="Mode" />
+              <FormControlLabel value="valence" control={<Radio />} label="Valence" />
+            </RadioGroup>
+          </FormControl>  
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Button color="primary" variant="contained" onClick={this.handleRoomButtonPressed}>
+            Generate
+          </Button>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Button color="secondary" variant="contained" to="/" component={Link}>
+            Back
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  }
+}
+
+/*
+     <FormControl component="fieldset">
             <FormHelperText component="div">
               <div align="center">Sorting Options</div>
             </FormHelperText>
@@ -95,38 +128,4 @@ export default class CreateRoomPage extends Component {
               />
             </RadioGroup>
           </FormControl>
-        </Grid>
-        <Grid item xs={12} align="center">
-          <Button color="primary" variant="contained" onClick={this.handleRoomButtonPressed}>
-            Generate
-          </Button>
-        </Grid>
-        <Grid item xs={12} align="center">
-          <Button color="secondary" variant="contained" to="/" component={Link}>
-            Back
-          </Button>
-        </Grid>
-      </Grid>
-    );
-  }
-}
-
-/*
-      <Grid item xs={12} align="center">
-          <FormControl>
-            <TextField
-              required={true}
-              type="number"
-              onChange={this.handleVotesChange}
-              defaultValue={this.defaultVotes}
-              inputProps={{
-                min: 1,
-                style: { textAlign: "center" },
-              }}
-            />
-            <FormHelperText component="div">
-              <div align="center">Number of Playlists</div>
-            </FormHelperText>
-          </FormControl>
-        </Grid>
 */

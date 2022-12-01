@@ -13,6 +13,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
+// import {Sort_Songs} from '../../../spotify/sort.py';
+
 export default class Room extends Component {
   constructor(props) {
     super(props);
@@ -22,8 +24,10 @@ export default class Room extends Component {
       isHost: false,
       showSettings: false,
       spotifyAuthenticated: false,
+      sorting_criteria: 'key',
       // all info of current song, if it's changed component will re-render
       playlists: [],
+      sorted_playlists: [],
     };
     this.roomCode = this.props.match.params.roomCode;
     this.leaveButtonPressed = this.leaveButtonPressed.bind(this);
@@ -52,6 +56,7 @@ export default class Room extends Component {
           votesToSkip: data.votes_to_skip,
           guestCanPause: data.guest_can_pause,
           isHost: data.is_host,
+          sorting_criteria: data.sorting_criteria
         });
         if (this.state.isHost) {
           this.authenticateSpotify();
@@ -120,7 +125,60 @@ export default class Room extends Component {
     );
   }
 
+  /*
+  sortSongs(){
+    s = Sort_Songs()
+    sorted = s.song_sort(this.state.playlists, this.state.sorting_criteria)
+    this.setState({ sorted_playlists: sorted });
+    
+    /*
+    const criteria = this.state.sorting_criteria
+    const myData = this.state.playlists.sort((a, b) => a.criteria > b.criteria ? 1 : -1)
+      .map((item) => (
+     <div key={item.id}> {item.name}</div>
+     
+  ));
+  */
+    /*
+    const sort = new Sort_Songs();
+    sorted = sort.song_sort(songs, this.state.sorting_criteria)
+    */
+   /*
+    const sorted = this.state.playlists
+    console.log('sorted crit')
+    console.log(this.state.sorting_criteria)
+    //sorted.sort(function(first, second) {
+      //return second.this.state.sorting_criteria - first.this.state.sorting_criteria;
+    //});
+    // this.setState({ playlists: sorted });
+    this.setState({
+      playlists: sorted.sort(function(first, second) {
+        return second.this.state.sorting_criteria - first.this.state.sorting_criteria;
+      })
+    });
+    return sorted
+  }
+  */
+
   renderSortedSongs() {
+    /*
+    console.log('soritng critiner')
+    console.log(this.state.sorting_criteria)
+    const crit = this.state.sorting_criteria
+    console.log(this.state.playlists[0].crit)
+    */
+
+    //s = Sort_Songs()
+    //sorted = s.song_sort(this.state.playlists, this.state.sorting_criteria).json();
+    //this.setState({ sorted_playlists: sorted });
+    const crit = this.state.sorting_criteria
+    console.log('crit')
+    console.log(this.state.sorting_criteria)
+    console.log(crit)
+    console.log(typeof crit)
+    console.log(typeof this.state.sorting_criteria)
+
+
     return (
       <TableContainer style={{ maxHeight: 900 }} component={Paper}>
       <Table stickyHeader aria-label="simple table">
@@ -132,7 +190,10 @@ export default class Room extends Component {
           </TableRow>
           </TableHead>
           <TableBody>
-          {this.state.playlists.map(item => (
+          {console.log(this.state.playlists[0].crit)}
+          {console.log(this.state.playlists[0].key)}
+          {this.state.playlists
+            .map(item => (
               <TableRow key={item.id}>
               <TableCell component="th" scope="row">
                   {item.title}
@@ -150,8 +211,10 @@ export default class Room extends Component {
   render() {
     // wait for songs to get sorted
     if (this.state.playlists.length != 0) {
+      // this.sortSongs();
       return this.renderSortedSongs();
     }
+    console.log(this.state.playlists)
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} align="center">
@@ -163,3 +226,17 @@ export default class Room extends Component {
     );
   }
 }
+
+/*
+{this.state.playlists
+            .sort((a, b) => a.crit > b.crit ? 1 : -1)
+            .map(item => (
+              <TableRow key={item.id}>
+              <TableCell component="th" scope="row">
+                  {item.title}
+              </TableCell>
+              <TableCell align="right">{item.artist}</TableCell>
+              <TableCell align="right">{item.crit}</TableCell>
+              </TableRow>
+          ))}
+          */
