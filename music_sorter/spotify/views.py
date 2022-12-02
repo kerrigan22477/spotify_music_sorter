@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from .util import *
 from api.models import Room
 import time
-from .sort import Sort_Songs
+#from .sort import Sort_Songs
 
 # inherit from APIView
 # API end point that returns a url
@@ -164,7 +164,7 @@ class UserPlaylists(APIView):
                 'artist': artist,
                 'danceability': response6.get('danceability'),
                 'energy': response6.get('energy'),
-                'key': response6.get('key'),
+                "key": response6.get('key'),
                 'mode': response6.get('mode'),
                 'valence': response6.get('valence'),
                 'tempo': response6.get('tempo'),
@@ -172,8 +172,8 @@ class UserPlaylists(APIView):
                 'id': id
             }
             finalList.append(song)
-        sort = Sort_Songs()
-        finalList = sort.song_sort(finalList, "key")
+        #sort = Sort_Songs()
+        #finalList = sort.song_sort(finalList, "key")
 
         # send back our reformatted info from spotify
         return Response(finalList, status=status.HTTP_200_OK)

@@ -13,8 +13,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-// import {Sort_Songs} from '../../../spotify/sort.py';
-
 export default class Room extends Component {
   constructor(props) {
     super(props);
@@ -36,8 +34,8 @@ export default class Room extends Component {
     this.renderSettings = this.renderSortedSongs.bind(this);
     this.getRoomDetails = this.getRoomDetails.bind(this);
     this.authenticateSpotify = this.authenticateSpotify.bind(this);
-    this.getPlaylists();
     this.getRoomDetails();
+    this.getPlaylists();
   }
 
   getRoomDetails() {
@@ -90,7 +88,11 @@ export default class Room extends Component {
         }
       })
       .then((data) => {
-        this.setState({ playlists: data });
+        // sort before setting the state
+        // avoid changing state at all costs
+        // it is bad practice 
+        const sorted = this.sortSongs(data)
+        this.setState({ playlists: sorted });
       });
   }
   
@@ -125,60 +127,39 @@ export default class Room extends Component {
     );
   }
 
-  /*
-  sortSongs(){
-    s = Sort_Songs()
-    sorted = s.song_sort(this.state.playlists, this.state.sorting_criteria)
-    this.setState({ sorted_playlists: sorted });
-    
-    /*
-    const criteria = this.state.sorting_criteria
-    const myData = this.state.playlists.sort((a, b) => a.criteria > b.criteria ? 1 : -1)
-      .map((item) => (
-     <div key={item.id}> {item.name}</div>
-     
-  ));
-  */
-    /*
-    const sort = new Sort_Songs();
-    sorted = sort.song_sort(songs, this.state.sorting_criteria)
-    */
-   /*
-    const sorted = this.state.playlists
-    console.log('sorted crit')
-    console.log(this.state.sorting_criteria)
-    //sorted.sort(function(first, second) {
-      //return second.this.state.sorting_criteria - first.this.state.sorting_criteria;
-    //});
-    // this.setState({ playlists: sorted });
-    this.setState({
-      playlists: sorted.sort(function(first, second) {
-        return second.this.state.sorting_criteria - first.this.state.sorting_criteria;
-      })
-    });
-    return sorted
+  sortSongs(data){
+    var pitch_class_notation = {
+      0: 'C',
+      1: 'C#',
+      2: 'D',
+      3: 'D#',
+      4: 'E',
+      5: 'F',
+      6: 'F#',
+      7: 'G',
+      8: 'G#',
+      9: 'A',
+      10: 'A#',
+      11: 'B'
+    };
+
+    const crit = this.state.sorting_criteria
+    if (crit === 'Key') {
+      data[0][crit] = pitch_class_notation[data[0][crit]]
+    }
+    data.sort(function(a, b){
+      if (crit === 'Key') {
+        a[crit] = pitch_class_notation[a[crit]]
+      }
+      return a[crit]-b[crit]
+    })
+    return data
   }
-  */
 
   renderSortedSongs() {
-    /*
-    console.log('soritng critiner')
-    console.log(this.state.sorting_criteria)
+    // capitilize sorting criteria to be displayed
     const crit = this.state.sorting_criteria
-    console.log(this.state.playlists[0].crit)
-    */
-
-    //s = Sort_Songs()
-    //sorted = s.song_sort(this.state.playlists, this.state.sorting_criteria).json();
-    //this.setState({ sorted_playlists: sorted });
-    const crit = this.state.sorting_criteria
-    console.log('crit')
-    console.log(this.state.sorting_criteria)
-    console.log(crit)
-    console.log(typeof crit)
-    console.log(typeof this.state.sorting_criteria)
-
-
+    const crit2 = crit.charAt(0).toUpperCase() + crit.slice(1);
     return (
       <TableContainer style={{ maxHeight: 900 }} component={Paper}>
       <Table stickyHeader aria-label="simple table">
@@ -186,12 +167,10 @@ export default class Room extends Component {
           <TableRow>
               <TableCell>Song</TableCell>
               <TableCell align="right">Artist</TableCell>
-              <TableCell align="right">Key</TableCell>
+              <TableCell align="right">{crit2}</TableCell>
           </TableRow>
           </TableHead>
-          <TableBody>
-          {console.log(this.state.playlists[0].crit)}
-          {console.log(this.state.playlists[0].key)}
+          <TableBody>]
           {this.state.playlists
             .map(item => (
               <TableRow key={item.id}>
@@ -199,7 +178,7 @@ export default class Room extends Component {
                   {item.title}
               </TableCell>
               <TableCell align="right">{item.artist}</TableCell>
-              <TableCell align="right">{item.key}</TableCell>
+              <TableCell align="right">{item[this.state.sorting_criteria]}</TableCell>
               </TableRow>
           ))}
           </TableBody>
@@ -211,7 +190,7 @@ export default class Room extends Component {
   render() {
     // wait for songs to get sorted
     if (this.state.playlists.length != 0) {
-      // this.sortSongs();
+      // this.sortSongs(songs);
       return this.renderSortedSongs();
     }
     console.log(this.state.playlists)

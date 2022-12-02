@@ -24,7 +24,6 @@ export default class CreateRoomPage extends Component {
     this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this);
     this.handleVotesChange = this.handleVotesChange.bind(this);
     this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
-    //this.handleSortingCriteria = this.handleSortingCriteria(this);
   }
 
   handleVotesChange(e) {
@@ -83,9 +82,13 @@ export default class CreateRoomPage extends Component {
               name="radio-buttons-group"
               onChange={this.handleGuestCanPauseChange}
             >
+              <FormControlLabel value="danceability" control={<Radio />} label="Danceability" />
+              <FormControlLabel value="energy" control={<Radio />} label="Energy" />
               <FormControlLabel value="key" control={<Radio />} label="Key" />
               <FormControlLabel value="mode" control={<Radio />} label="Mode" />
               <FormControlLabel value="valence" control={<Radio />} label="Valence" />
+              <FormControlLabel value="tempo" control={<Radio />} label="Tempo" />
+              <FormControlLabel value="instrumentalness" control={<Radio />} label="Instrumentalness" />
             </RadioGroup>
           </FormControl>  
         </Grid>

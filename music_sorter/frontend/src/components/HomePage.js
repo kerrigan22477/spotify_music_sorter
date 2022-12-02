@@ -43,6 +43,11 @@ export default class HomePage extends Component {
             Create a Playlist
           </Button>
         </Grid>
+        <Grid item xs={12} align="center">
+          <Button color="primary" to="/options" component={Link}>
+            Information and Options
+          </Button>
+        </Grid>
       </Grid>
     );
   }
