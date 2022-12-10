@@ -82,7 +82,7 @@ def refresh_spotify_token(session_id):
     update_or_create_user_tokens(session_id, access_token, token_type, expires_in, refresh_token)
 
 # send request to spotify(use token) in util.py
-# sesssion id = host id
+# sesssion id = user id
 # endpoint = what endpoint of spotify api we want
 def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
     # use user's unique id to get there token

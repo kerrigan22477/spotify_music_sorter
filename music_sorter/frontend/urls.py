@@ -14,7 +14,7 @@ app_name = 'frontend'
 urlpatterns = [
     # named our path, so when we call redirect function we know where to go
     path('', index, name=''),
-    path('create', index),
+    path('sorting', index),
     path('room/<str:roomCode>', index),
     path('options', index)
 ]

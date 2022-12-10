@@ -96,13 +96,13 @@ class UserPlaylists(APIView):
             room = room[0]
         else:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
-        host = room.host
+        user = room.user
 
         # end point to access spotify user's playlist data
         get_playlists_endpoint = 'me/playlists'
 
         # send request to spotify(use token) in util.py
-        response = execute_spotify_api_request(host, get_playlists_endpoint)
+        response = execute_spotify_api_request(user, get_playlists_endpoint)
 
         # get each playlist's data from response
         playlists = response.get('items')
@@ -118,7 +118,7 @@ class UserPlaylists(APIView):
             # endpoint to access all the tracks in a specific playlist 
             curr_playlist_endpoint = 'playlists/' + str(id) + '/tracks'
             # ask spotify for the specific playlist's songs (tracks)
-            response2 = execute_spotify_api_request(host, curr_playlist_endpoint)
+            response2 = execute_spotify_api_request(user, curr_playlist_endpoint)
             time.sleep(.15)
 
             response3 = response2.get('items')
@@ -139,7 +139,7 @@ class UserPlaylists(APIView):
             # track_endpoint = 'tracks/' + str(track)
             track_endpoint = 'audio-features/' + str(id)
             # get track data from spotify
-            response6 = execute_spotify_api_request(host, track_endpoint)
+            response6 = execute_spotify_api_request(user, track_endpoint)
 
             song = {
                 'title': name,

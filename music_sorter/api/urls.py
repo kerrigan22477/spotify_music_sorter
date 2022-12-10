@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import RoomView, CreateRoomView, GetRoom, UserInRoom, LeaveRoom, UpdateRoom
-#from .views import RoomView, CreateRoomView, UserInRoom, UpdateRoom
+from .views import RoomView, SortingPageView, GetRoom, UserInRoom, LeaveRoom, UpdateRoom
 
 urlpatterns = [
     # if we get a blank url, call main func in views.py
@@ -10,7 +9,7 @@ urlpatterns = [
     # redirect to RoomView class, and make path the view from it 
     # this is what .as_view() does
     path('room', RoomView.as_view()),
-    path('create-room', CreateRoomView.as_view()),
+    path('create-room', SortingPageView.as_view()),
     path('get-room', GetRoom.as_view()),
     path('user-in-room', UserInRoom.as_view()),
     path('leave-room', LeaveRoom.as_view()),

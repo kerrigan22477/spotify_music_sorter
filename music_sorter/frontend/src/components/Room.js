@@ -17,7 +17,7 @@ export default class Room extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isHost: false,
+      isUser: false,
       spotifyAuthenticated: false,
       sorting_criteria: 'key',
       playlists: [],
@@ -41,10 +41,10 @@ export default class Room extends Component {
       })
       .then((data) => {
         this.setState({
-          isHost: data.is_host,
+          isUser: data.is_user,
           sorting_criteria: data.sorting_criteria
         });
-        if (this.state.isHost) {
+        if (this.state.isUser) {
           this.authenticateSpotify();
         }
       });
@@ -91,7 +91,7 @@ export default class Room extends Component {
     };
     fetch("/api/leave-room", requestOptions).then((_response) => {
       this.props.leaveRoomCallback();
-      this.props.history.push("/create");
+      this.props.history.push("/sorting");
     });
   }
 

@@ -19,23 +19,11 @@ def generate_unique_code():
 class Room(models.Model):
     # store a bunch of characters, with these parameters
     code = models.CharField(max_length=8, default=generate_unique_code, unique=True)
-    host = models.CharField(max_length=50, unique=True)
+    user = models.CharField(max_length=50, unique=True)
 
     # have to input something, if not answer is key
     sorting_criteria = models.CharField(max_length=20, null=False, default='key')
     # never have to pass date/time obj, when we create room it is
     # automatically added
     created_at = models.DateTimeField(auto_now_add=True)
-
-
-
-    '''
-    can add methods, Ex:
-
-    def is_host_this(host):
-         whatever
-
-    # who is using the spotify account
-    user = models.CharField(max_length=50, unique=True)
-    '''
 

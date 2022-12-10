@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import CreateRoomPage from "./CreateRoomPage";
+import SortingPage from "./SortingPage";
 import Room from "./Room";
 import Options from "./Options";
 import { Grid, Button, Typography } from "@material-ui/core";
@@ -40,7 +40,7 @@ export default class HomePage extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
-          <Button color="primary" to="/create" component={Link}>
+          <Button color="primary" to="/sorting" component={Link}>
             Create a Playlist
           </Button>
         </Grid>
@@ -74,7 +74,7 @@ export default class HomePage extends Component {
               );
             }}
           />
-          <Route path="/create" component={CreateRoomPage} />
+          <Route path="/sorting" component={SortingPage} />
           <Route
             path="/room/:roomCode"
             render={(props) => {
