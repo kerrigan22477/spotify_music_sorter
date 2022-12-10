@@ -6,7 +6,8 @@ html, body {
 
 #main {
     /* our main div will be at top left hand corner and fill entire screen */
-    /* fixed position means no scrolling */ 
+    /* fixed position means no scrolling 
+    we manually add scrolling for our table in the sorted playlists page */ 
     position: fixed;
     width: 100%;
     height: 100%;

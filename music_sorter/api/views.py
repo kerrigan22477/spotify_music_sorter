@@ -120,15 +120,16 @@ class UpdateRoom(APIView):
             
             sorting_criteria = serializer.data.get('sorting_criteria')
 
+            
             queryset = Room.objects.filter(code=code)
+
+            '''
             if not queryset.exists():
                 return Response({'msg': 'Room not found.'}, status=status.HTTP_404_NOT_FOUND)
+                '''
+                
 
             room = queryset[0]
-            user_id = self.request.session.session_key
-            if room.host != user_id:
-                return Response({'msg': 'You are not the host of this room.'}, status=status.HTTP_403_FORBIDDEN)
-
             room.sorting_criteria = sorting_criteria
             room.save(update_fields=['sorting_criteria',])
             return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)

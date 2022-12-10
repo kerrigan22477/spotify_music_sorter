@@ -81,23 +81,9 @@ def refresh_spotify_token(session_id):
 
     update_or_create_user_tokens(session_id, access_token, token_type, expires_in, refresh_token)
 
-    # send request to spotify(use token) in util.py
-    # sesssion id = host id
-    # endpoint = what endpoint of spotify api we want
-
-
-
-# https://api.spotify.com/v1/playlists/playlist_id
-# https://api.spotify.com/v1/users/user_id/playlists
-# https://api.spotify.com/v1/me/player/recently-played
-# https://api.spotify.com/v1/tracks/id
-# https://api.spotify.com/v1/audio-features/id
-
-# 'playlists/playlist_id'
-# 'me/playlists'
-# 'me/player/currently-playing'
-# 'tracks/track_id'
-# 'audio-features/track_id'
+# send request to spotify(use token) in util.py
+# sesssion id = host id
+# endpoint = what endpoint of spotify api we want
 def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
     # use user's unique id to get there token
     tokens = get_user_tokens(session_id)

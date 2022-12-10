@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from .util import *
 from api.models import Room
 import time
-#from .sort import Sort_Songs
 
 # inherit from APIView
 # API end point that returns a url
@@ -18,9 +17,6 @@ class AuthURL(APIView):
     # this API endpoint is called in our frontend
     def get(self, request, format=None):
         # this is the data we are getting from spotify
-        # will need to change for our app obvi but for tutorial it is this
-        # find scopes on spotify developer website
-        # scopes = 'user-read-playback-state user-modify-playback-state user-read-currently-playing'
         scopes = 'playlist-read-private playlist-read-collaborative user-library-read'
 
         # our front end will get and send this request
@@ -100,8 +96,6 @@ class UserPlaylists(APIView):
             room = room[0]
         else:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
-
-        # in case user isn't the host and wants song info
         host = room.host
 
         # end point to access spotify user's playlist data
@@ -109,10 +103,10 @@ class UserPlaylists(APIView):
 
         # send request to spotify(use token) in util.py
         response = execute_spotify_api_request(host, get_playlists_endpoint)
-        #print(response)
 
         # get each playlist's data from response
         playlists = response.get('items')
+        # takes a minute so we need to wait
         time.sleep(.25)
 
         # get id for each playlist 
@@ -126,29 +120,18 @@ class UserPlaylists(APIView):
             # ask spotify for the specific playlist's songs (tracks)
             response2 = execute_spotify_api_request(host, curr_playlist_endpoint)
             time.sleep(.15)
-            # print('response2: ' + str(response2.get('items')))
 
             response3 = response2.get('items')
-            '''
-            response4 = response3[0]
-            response5 = response4.get('track')
-            track_id = response5.get('id')
-            track_name = response5.get('name')
-            track_ids2[track_id] = track_name
-            '''
             for song in response3:
                 response5 = song.get('track')
                 track_id = response5.get('id')
                 track_name = response5.get('name')
                 track_artist = song.get('track').get('artists')[0].get('name')
-                #print('response2: ' + str(track_id))
 
                 track_ids.append(track_id)
                 track_ids2[track_id] = [track_name, track_artist]
             
 
-        #for track in track_ids:
-        #print(track_ids2)
         finalList = []
         for id in track_ids2.keys():
             name = track_ids2[id][0]
@@ -157,7 +140,6 @@ class UserPlaylists(APIView):
             track_endpoint = 'audio-features/' + str(id)
             # get track data from spotify
             response6 = execute_spotify_api_request(host, track_endpoint)
-            # need to wait for this to get called, otherwise reutrns none for all vals
 
             song = {
                 'title': name,
@@ -172,8 +154,6 @@ class UserPlaylists(APIView):
                 'id': id
             }
             finalList.append(song)
-        #sort = Sort_Songs()
-        #finalList = sort.song_sort(finalList, "key")
 
         # send back our reformatted info from spotify
         return Response(finalList, status=status.HTTP_200_OK)

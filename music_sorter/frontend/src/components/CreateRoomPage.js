@@ -9,7 +9,6 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 export default class CreateRoomPage extends Component {
-  defaultVotes = 2;
 
   constructor(props) {
     super(props);
@@ -17,29 +16,18 @@ export default class CreateRoomPage extends Component {
       sorting_criteria: 'key'
     };
 
-    this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this);
-    this.handleVotesChange = this.handleVotesChange.bind(this);
-    this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
+    this.handleSelectSortingCriteria = this.handleSelectSortingCriteria.bind(this);
+    this.handleGeneratePlaylistButton = this.handleGeneratePlaylistButton.bind(this);
   }
 
-  handleVotesChange(e) {
-    // changing state forces page to refresh and updates the data listed here
-    // setState() used for modifying state, 
-    // e.target.value gets value from object we called and uses it to change state
-    this.setState({
-      votesToSkip: e.target.value,
-    });
-  }
-
-  handleGuestCanPauseChange(e) {
-    // if string is true, guestcanpause = true else false hahaha duh
+  handleSelectSortingCriteria(e) {
     this.setState({
       sorting_criteria: e.target.value
     });
     console.log(this.state.sorting_criteria)
   }
 
-  handleRoomButtonPressed() {
+  handleGeneratePlaylistButton() {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -74,7 +62,7 @@ export default class CreateRoomPage extends Component {
               aria-labelledby="demo-radio-buttons-group-label"
               defaultValue="key"
               name="radio-buttons-group"
-              onChange={this.handleGuestCanPauseChange}
+              onChange={this.handleSelectSortingCriteria}
             >
               <FormControlLabel value="danceability" control={<Radio />} label="Danceability" />
               <FormControlLabel value="energy" control={<Radio />} label="Energy" />
@@ -87,7 +75,7 @@ export default class CreateRoomPage extends Component {
           </FormControl>  
         </Grid>
         <Grid item xs={12} align="center">
-          <Button color="primary" variant="contained" onClick={this.handleRoomButtonPressed}>
+          <Button color="primary" variant="contained" onClick={this.handleGeneratePlaylistButton}>
             Generate
           </Button>
         </Grid>

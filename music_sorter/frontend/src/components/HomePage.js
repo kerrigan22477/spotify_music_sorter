@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CreateRoomPage from "./CreateRoomPage";
 import Room from "./Room";
 import Options from "./Options";
-import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
+import { Grid, Button, Typography } from "@material-ui/core";
 import {
   BrowserRouter as Router,
   Switch,

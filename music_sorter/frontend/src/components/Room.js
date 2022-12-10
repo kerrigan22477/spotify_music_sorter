@@ -18,10 +18,8 @@ export default class Room extends Component {
     super(props);
     this.state = {
       isHost: false,
-      // showSettings: false,
       spotifyAuthenticated: false,
       sorting_criteria: 'key',
-      // all info of current song, if it's changed component will re-render
       playlists: [],
     };
     this.roomCode = this.props.match.params.roomCode;
@@ -42,8 +40,6 @@ export default class Room extends Component {
         return response.json();
       })
       .then((data) => {
-        console.log('room data')
-        console.log(data)
         this.setState({
           isHost: data.is_host,
           sorting_criteria: data.sorting_criteria
@@ -95,7 +91,7 @@ export default class Room extends Component {
     };
     fetch("/api/leave-room", requestOptions).then((_response) => {
       this.props.leaveRoomCallback();
-      this.props.history.push("/");
+      this.props.history.push("/create");
     });
   }
 
@@ -140,7 +136,7 @@ export default class Room extends Component {
           color="primary"
           onClick={this.leaveButtonPressed}
         >
-          Return to Home Page
+          Back to Sorting Options
         </Button>
       </Grid>
       <Grid item xs={12} align="center">
@@ -174,45 +170,18 @@ export default class Room extends Component {
   }
 
   render() {
-    // wait for songs to get sorted and then
+    // wait for songs to get sorted and then render
     if (this.state.playlists.length != 0) {
       return this.renderSortedSongs();
     }
-    console.log(this.state.playlists)
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} align="center">
           <Typography variant="h4" component="h4">
-            loading
+            loading...
           </Typography>
         </Grid>
       </Grid>
     );
   }
 }
-
-/*
-      <TableContainer style={{ maxHeight: 900 }} component={Paper}>
-      <Table stickyHeader aria-label="simple table">
-          <TableHead>
-          <TableRow>
-              <TableCell>Song</TableCell>
-              <TableCell align="right">Artist</TableCell>
-              <TableCell align="right">{crit2}</TableCell>
-          </TableRow>
-          </TableHead>
-          <TableBody>]
-          {this.state.playlists
-            .map(item => (
-              <TableRow key={item.id}>
-              <TableCell component="th" scope="row">
-                  {item.title}
-              </TableCell>
-              <TableCell align="right">{item.artist}</TableCell>
-              <TableCell align="right">{item[this.state.sorting_criteria]}</TableCell>
-              </TableRow>
-          ))}
-          </TableBody>
-      </Table>
-      </TableContainer>
-      */
