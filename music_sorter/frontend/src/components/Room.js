@@ -17,21 +17,15 @@ export default class Room extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      votesToSkip: 2,
-      guestCanPause: false,
       isHost: false,
-      showSettings: false,
+      // showSettings: false,
       spotifyAuthenticated: false,
       sorting_criteria: 'key',
       // all info of current song, if it's changed component will re-render
       playlists: [],
-      sorted_playlists: [],
     };
     this.roomCode = this.props.match.params.roomCode;
     this.leaveButtonPressed = this.leaveButtonPressed.bind(this);
-    this.updateShowSettings = this.updateShowSettings.bind(this);
-    this.renderSettingsButton = this.renderSettingsButton.bind(this);
-    this.renderSettings = this.renderSortedSongs.bind(this);
     this.getRoomDetails = this.getRoomDetails.bind(this);
     this.authenticateSpotify = this.authenticateSpotify.bind(this);
     this.getRoomDetails();
@@ -51,8 +45,6 @@ export default class Room extends Component {
         console.log('room data')
         console.log(data)
         this.setState({
-          votesToSkip: data.votes_to_skip,
-          guestCanPause: data.guest_can_pause,
           isHost: data.is_host,
           sorting_criteria: data.sorting_criteria
         });
@@ -107,26 +99,6 @@ export default class Room extends Component {
     });
   }
 
-  updateShowSettings(value) {
-    this.setState({
-      showSettings: value,
-    });
-  }
-
-  renderSettingsButton() {
-    return (
-      <Grid item xs={12} align="center">
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => this.updateShowSettings(true)}
-        >
-          Settings
-        </Button>
-      </Grid>
-    );
-  }
-
   sortSongs(data){
     var pitch_class_notation = {
       0: 'C',
@@ -162,6 +134,65 @@ export default class Room extends Component {
     const crit = this.state.sorting_criteria
     const crit2 = crit.charAt(0).toUpperCase() + crit.slice(1);
     return (
+      <Grid container spacing={1}>
+      <Grid item xs={12} align="center">
+        <TableContainer style={{ maxHeight: 900 }} component={Paper}>
+          <Table stickyHeader aria-label="simple table">
+              <TableHead>
+              <TableRow>
+                  <TableCell>Song</TableCell>
+                  <TableCell align="right">Artist</TableCell>
+                  <TableCell align="right">{crit2}</TableCell>
+              </TableRow>
+              </TableHead>
+              <TableBody>]
+              {this.state.playlists
+                .map(item => (
+                  <TableRow key={item.id}>
+                  <TableCell component="th" scope="row">
+                      {item.title}
+                  </TableCell>
+                  <TableCell align="right">{item.artist}</TableCell>
+                  <TableCell align="right">{item[this.state.sorting_criteria]}</TableCell>
+                  </TableRow>
+              ))}
+              </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      <Grid item xs={12} align="center">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={this.leaveButtonPressed}
+        >
+          Leave Room
+        </Button>
+      </Grid>
+    </Grid>
+
+    )
+  }
+
+  render() {
+    // wait for songs to get sorted and then
+    if (this.state.playlists.length != 0) {
+      return this.renderSortedSongs();
+    }
+    console.log(this.state.playlists)
+    return (
+      <Grid container spacing={1}>
+        <Grid item xs={12} align="center">
+          <Typography variant="h4" component="h4">
+            loading
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
+}
+
+/*
       <TableContainer style={{ maxHeight: 900 }} component={Paper}>
       <Table stickyHeader aria-label="simple table">
           <TableHead>
@@ -185,38 +216,4 @@ export default class Room extends Component {
           </TableBody>
       </Table>
       </TableContainer>
-    )
-  }
-
-  render() {
-    // wait for songs to get sorted
-    if (this.state.playlists.length != 0) {
-      // this.sortSongs(songs);
-      return this.renderSortedSongs();
-    }
-    console.log(this.state.playlists)
-    return (
-      <Grid container spacing={1}>
-        <Grid item xs={12} align="center">
-          <Typography variant="h4" component="h4">
-            loading
-          </Typography>
-        </Grid>
-      </Grid>
-    );
-  }
-}
-
-/*
-{this.state.playlists
-            .sort((a, b) => a.crit > b.crit ? 1 : -1)
-            .map(item => (
-              <TableRow key={item.id}>
-              <TableCell component="th" scope="row">
-                  {item.title}
-              </TableCell>
-              <TableCell align="right">{item.artist}</TableCell>
-              <TableCell align="right">{item.crit}</TableCell>
-              </TableRow>
-          ))}
-          */
+      */

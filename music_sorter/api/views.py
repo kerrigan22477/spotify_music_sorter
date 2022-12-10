@@ -53,10 +53,7 @@ class CreateRoomView(APIView):
         # user create room serailizer to check if request data valid
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            guest_can_pause = serializer.data.get('guest_can_pause')
-            votes_to_skip = serializer.data.get('votes_to_skip')
             sorting_criteria = serializer.data.get('sorting_criteria')
-            host = serializer.data.get('host')
             host = self.request.session.session_key
 
             # if user already has a room and tries to make a new one,
@@ -65,19 +62,17 @@ class CreateRoomView(APIView):
             queryset = Room.objects.filter(host=host)
             if queryset.exists():
                 room = queryset[0]
-                room.guest_can_pause = guest_can_pause
-                room.votes_to_skip = votes_to_skip
+                #room.guest_can_pause = guest_can_pause
+                #room.votes_to_skip = votes_to_skip
                 room.sorting_criteria = sorting_criteria
                 # when updating an object by resaving it, need to use
                 # this update fields method to force these fields to udpate
-                room.save(update_fields=['guest_can_pause', 'votes_to_skip', 'sorting_criteria'])
-                #room.save(update_fields=['sorting_criteria'])
+                room.save(update_fields=['sorting_criteria',])
                 self.request.session['room_code'] = room.code
                 return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
 
             # if not updating the room create a new one! 
             else:
-                #room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip, sorting_criteria=sorting_criteria)
                 room = Room(host=host, sorting_criteria=sorting_criteria)
                 room.save()
                 self.request.session['room_code'] = room.code
@@ -121,8 +116,6 @@ class UpdateRoom(APIView):
 
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            guest_can_pause = serializer.data.get('guest_can_pause')
-            votes_to_skip = serializer.data.get('votes_to_skip')
             code = serializer.data.get('code')
             
             sorting_criteria = serializer.data.get('sorting_criteria')
@@ -136,10 +129,8 @@ class UpdateRoom(APIView):
             if room.host != user_id:
                 return Response({'msg': 'You are not the host of this room.'}, status=status.HTTP_403_FORBIDDEN)
 
-            room.guest_can_pause = guest_can_pause
-            room.votes_to_skip = votes_to_skip
             room.sorting_criteria = sorting_criteria
-            room.save(update_fields=['guest_can_pause', 'votes_to_skip', 'sorting_criteria'])
+            room.save(update_fields=['sorting_criteria',])
             return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
 
         return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)

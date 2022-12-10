@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import { Link } from "react-router-dom";
 import Radio from "@material-ui/core/Radio";
@@ -16,8 +14,6 @@ export default class CreateRoomPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      guestCanPause: true,
-      votesToSkip: this.defaultVotes,
       sorting_criteria: 'key'
     };
 
@@ -48,8 +44,6 @@ export default class CreateRoomPage extends Component {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        //votes_to_skip: this.state.votesToSkip,
-        //guest_can_pause: this.state.guestCanPause,
         sorting_criteria: this.state.sorting_criteria
       }),
     };
@@ -106,29 +100,3 @@ export default class CreateRoomPage extends Component {
     );
   }
 }
-
-/*
-     <FormControl component="fieldset">
-            <FormHelperText component="div">
-              <div align="center">Sorting Options</div>
-            </FormHelperText>
-            <RadioGroup
-              row
-              defaultValue="true"
-              onChange={this.handleGuestCanPauseChange}
-            >
-              <FormControlLabel
-                value="true"
-                control={<Radio color="primary" />}
-                label="Play/Pause"
-                labelPlacement="bottom"
-              />
-              <FormControlLabel
-                value="false"
-                control={<Radio color="secondary" />}
-                label="No Control"
-                labelPlacement="bottom"
-              />
-            </RadioGroup>
-          </FormControl>
-*/
