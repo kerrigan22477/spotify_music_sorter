@@ -15,7 +15,6 @@ export default class CreateRoomPage extends Component {
     this.state = {
       sorting_criteria: 'key'
     };
-
     this.handleSelectSortingCriteria = this.handleSelectSortingCriteria.bind(this);
     this.handleGeneratePlaylistButton = this.handleGeneratePlaylistButton.bind(this);
   }
