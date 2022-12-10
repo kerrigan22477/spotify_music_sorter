@@ -147,6 +147,7 @@ export default class Room extends Component {
     if (crit === 'Key') {
       data[0][crit] = pitch_class_notation[data[0][crit]]
     }
+    
     data.sort(function(a, b){
       if (crit === 'Key') {
         a[crit] = pitch_class_notation[a[crit]]

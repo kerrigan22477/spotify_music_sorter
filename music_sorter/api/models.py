@@ -20,9 +20,11 @@ class Room(models.Model):
     # store a bunch of characters, with these parameters
     code = models.CharField(max_length=8, default=generate_unique_code, unique=True)
     host = models.CharField(max_length=50, unique=True)
-    # have to input something, if not answer is no
+
     guest_can_pause = models.BooleanField(null=False, default=False)
     votes_to_skip = models.IntegerField(null=False, default=1)
+
+    # have to input something, if not answer is key
     sorting_criteria = models.CharField(max_length=20, null=False, default='key')
     # never have to pass date/time obj, when we create room it is
     # automatically added

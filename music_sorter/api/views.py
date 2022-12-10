@@ -19,6 +19,7 @@ class RoomView(generics.CreateAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
 
+
 class GetRoom(APIView):
     serializer_class = RoomSerializer
     lookup_url_kwarg = 'code'
@@ -55,6 +56,7 @@ class CreateRoomView(APIView):
             guest_can_pause = serializer.data.get('guest_can_pause')
             votes_to_skip = serializer.data.get('votes_to_skip')
             sorting_criteria = serializer.data.get('sorting_criteria')
+            host = serializer.data.get('host')
             host = self.request.session.session_key
 
             # if user already has a room and tries to make a new one,
@@ -69,12 +71,14 @@ class CreateRoomView(APIView):
                 # when updating an object by resaving it, need to use
                 # this update fields method to force these fields to udpate
                 room.save(update_fields=['guest_can_pause', 'votes_to_skip', 'sorting_criteria'])
+                #room.save(update_fields=['sorting_criteria'])
                 self.request.session['room_code'] = room.code
                 return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
 
             # if not updating the room create a new one! 
             else:
-                room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip, sorting_criteria=sorting_criteria)
+                #room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip, sorting_criteria=sorting_criteria)
+                room = Room(host=host, sorting_criteria=sorting_criteria)
                 room.save()
                 self.request.session['room_code'] = room.code
                 return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
