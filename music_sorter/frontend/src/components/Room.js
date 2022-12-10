@@ -135,6 +135,14 @@ export default class Room extends Component {
     const crit2 = crit.charAt(0).toUpperCase() + crit.slice(1);
     return (
       <Grid container spacing={1}>
+        <Grid item xs={12} align="center">
+        <Button
+          color="primary"
+          onClick={this.leaveButtonPressed}
+        >
+          Return to Home Page
+        </Button>
+      </Grid>
       <Grid item xs={12} align="center">
         <TableContainer style={{ maxHeight: 900 }} component={Paper}>
           <Table stickyHeader aria-label="simple table">
@@ -159,15 +167,6 @@ export default class Room extends Component {
               </TableBody>
           </Table>
         </TableContainer>
-      </Grid>
-      <Grid item xs={12} align="center">
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={this.leaveButtonPressed}
-        >
-          Leave Room
-        </Button>
       </Grid>
     </Grid>
 

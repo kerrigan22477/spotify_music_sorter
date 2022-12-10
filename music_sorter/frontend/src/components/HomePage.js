@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import CreateRoomPage from "./CreateRoomPage";
 import Room from "./Room";
+import Options from "./Options";
 import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
 import {
   BrowserRouter as Router,
@@ -80,6 +81,7 @@ export default class HomePage extends Component {
               return <Room {...props} leaveRoomCallback={this.clearRoomCode} />;
             }}
           />
+          <Route path="/options" component={Options} />
         </Switch>
       </Router>
     );
