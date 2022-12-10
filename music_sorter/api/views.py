@@ -12,7 +12,7 @@ class RoomView(generics.CreateAPIView):
     queryset = Room.objects.all()
 
 
-# get user's info (aka data associated with them)
+# get user's info (aka) data associated with them
 class GetRoom(APIView):
     lookup_url_kwarg = 'code'
 
