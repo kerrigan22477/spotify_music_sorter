@@ -1,29 +1,30 @@
 from django.shortcuts import render
 from rest_framework import generics, status
-from .serializers import RoomSerializer, SortingPageSerializer, UpdateRoomSerializer
-from .models import Room
+from .serializers import UserSerializer, SortingPageSerializer, UpdateSortedSerializer
+from .models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse
 
 # allows us to view and create room for each user. (room holds all user data, displayed on room page)
 # this class also gives us a fancy view
-class RoomView(generics.CreateAPIView):
-    queryset = Room.objects.all()
+class UserView(generics.CreateAPIView):
+    # get all existing logged in user's info 
+    queryset = User.objects.all()
 
 
 # get user's info (aka) data associated with them
-class GetRoom(APIView):
+class GetUser(APIView):
     lookup_url_kwarg = 'code'
 
     def get(self, request, format=None):
         code = request.GET.get(self.lookup_url_kwarg)
         # if user hasn't logged in, make them login and store them in system
         if code != None:
-            room = Room.objects.filter(code=code)
-            if len(room) > 0:
-                data = RoomSerializer(room[0]).data
-                data['is_user'] = self.request.session.session_key == room[0].user
+            user = User.objects.filter(code=code)
+            if len(user) > 0:
+                data = UserSerializer(user[0]).data
+                data['is_user'] = self.request.session.session_key == user[0].user
                 return Response(data, status=status.HTTP_200_OK)
             return Response({'Room Not Found': 'Invalid Room Code.'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -51,28 +52,28 @@ class SortingPageView(APIView):
 
             # if user already has a room and tries to make a new one,
             # there room will have the same code but with the updated settings
-            queryset = Room.objects.filter(user=user)
+            queryset = User.objects.filter(user=user)
             if queryset.exists():
-                room = queryset[0]
-                room.sorting_criteria = sorting_criteria
+                user = queryset[0]
+                user.sorting_criteria = sorting_criteria
                 # when updating an object by resaving it, need to use
                 # this update fields method to force these fields to udpate
-                room.save(update_fields=['sorting_criteria',])
-                self.request.session['room_code'] = room.code
-                return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+                user.save(update_fields=['sorting_criteria',])
+                self.request.session['room_code'] = user.code
+                return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
             # if not updating the room create a new one! 
             else:
-                room = Room(user=user, sorting_criteria=sorting_criteria)
-                room.save()
-                self.request.session['room_code'] = room.code
-                return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
+                user = User(user=user, sorting_criteria=sorting_criteria)
+                user.save()
+                self.request.session['room_code'] = user.code
+                return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
             
             # return room by serializing it
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
 
-# are they in the room page that contains there data
-class UserInRoom(APIView):
+# are they logged in and do we already have there info 
+class UserLoggedIn(APIView):
     def get(self,request, format=None):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
@@ -82,38 +83,38 @@ class UserInRoom(APIView):
         }
         return JsonResponse(data, status=status.HTTP_200_OK)
 
-# leave room page w/ there data but keep them logged in if they want to sort again
-class LeaveRoom(APIView):
+# leave sorted page w/ there data but keep them logged in if they want to sort again
+class LeaveSorted(APIView):
     def post(self, request, format=None):
         # if user already logged in, 
         if 'room_code' in self.request.session:
             # get there info 
             self.request.session.pop('room_code')
             user_id = self.request.session.session_key
-            room_results = Room.objects.filter(user=user_id)
-            if len(room_results) > 0:
-                room = room_results[0]
-                room.delete()
+            user_data = User.objects.filter(user=user_id)
+            if len(user_data) > 0:
+                user = user_data[0]
+                user.delete()
 
         return Response({'Message': 'Success'}, status=status.HTTP_200_OK)
 
 # update changed sorting criteria for specific user
-class UpdateRoom(APIView):
+class UpdateSorted(APIView):
     def patch(self, request, format=None):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
 
-        serializer = UpdateRoomSerializer(data=request.data)
+        serializer = UpdateSortedSerializer(data=request.data)
         if serializer.is_valid():
             code = serializer.data.get('code')
             
             sorting_criteria = serializer.data.get('sorting_criteria')
 
             # if user is already logged in, get there specific info
-            queryset = Room.objects.filter(code=code)
-            room = queryset[0]
-            room.sorting_criteria = sorting_criteria
-            room.save(update_fields=['sorting_criteria',])
-            return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+            queryset = User.objects.filter(code=code)
+            user = queryset[0]
+            user.sorting_criteria = sorting_criteria
+            user.save(update_fields=['sorting_criteria',])
+            return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
         return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)

@@ -11,15 +11,15 @@ def generate_unique_code():
         # check all room objects in the database, and filter to see if 
         # they have a code = our code, and if there is one, re generate
         # #if not, break and return code 
-        if Room.objects.filter(code=code).count() == 0:
+        if User.objects.filter(code=code).count() == 0:
             break
 
     return code
 
-class Room(models.Model):
+class User(models.Model):
     # store a bunch of characters, with these parameters
-    code = models.CharField(max_length=8, default=generate_unique_code, unique=True)
-    user = models.CharField(max_length=50, unique=True)
+    code = models.CharField(max_length=10, default=generate_unique_code, unique=True)
+    user = models.CharField(max_length=30, unique=True)
 
     # have to input something, if not answer is key
     sorting_criteria = models.CharField(max_length=20, null=False, default='key')

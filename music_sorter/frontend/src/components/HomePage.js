@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import SortingPage from "./SortingPage";
-import Room from "./Room";
+import User from "./User";
 import Options from "./Options";
 import { Grid, Button, Typography } from "@material-ui/core";
 import {
@@ -15,9 +15,9 @@ export default class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      roomCode: null,
+      userCode: null,
     };
-    this.clearRoomCode = this.clearRoomCode.bind(this);
+    this.clearUserCode = this.clearRoomCode.bind(this);
   }
 
   // aasync tells program we don't need to wait for it to finish to do other stuff
@@ -25,64 +25,64 @@ export default class HomePage extends Component {
     fetch("/api/user-in-room")
       .then((response) => response.json())
       .then((data) => {
-        this.setState({
-          roomCode: data.code,
-        });
+	this.setState({
+	  userCode: data.code,
+	});
       });
   }
 
   renderHomePage() {
     return (
       <Grid container spacing={3}>
-        <Grid item xs={12} align="center">
-          <Typography variant="h3" compact="h3">
-            Spotify Playlist Creator
-          </Typography>
-        </Grid>
-        <Grid item xs={12} align="center">
-          <Button color="primary" to="/sorting" component={Link}>
-            Create a Playlist
-          </Button>
-        </Grid>
-        <Grid item xs={12} align="center">
-          <Button color="primary" to="/options" component={Link}>
-            Information and Options
-          </Button>
-        </Grid>
+	<Grid item xs={12} align="center">
+	  <Typography variant="h3" compact="h3">
+	    Spotify Playlist Creator
+	  </Typography>
+	</Grid>
+	<Grid item xs={12} align="center">
+	  <Button color="primary" to="/sorting" component={Link}>
+	    Create a Playlist
+	  </Button>
+	</Grid>
+	<Grid item xs={12} align="center">
+	  <Button color="primary" to="/options" component={Link}>
+	    Information and Options
+	  </Button>
+	</Grid>
       </Grid>
     );
   }
 
   clearRoomCode() {
     this.setState({
-      roomCode: null,
+      userCode: null,
     });
   }
 
   render() {
     return (
       <Router>
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => {
-              return this.state.roomCode ? (
-                <Redirect to={`/room/${this.state.roomCode}`} />
-              ) : (
-                this.renderHomePage()
-              );
-            }}
-          />
-          <Route path="/sorting" component={SortingPage} />
-          <Route
-            path="/room/:roomCode"
-            render={(props) => {
-              return <Room {...props} leaveRoomCallback={this.clearRoomCode} />;
-            }}
-          />
-          <Route path="/options" component={Options} />
-        </Switch>
+	<Switch>
+	  <Route
+	    exact
+	    path="/"
+	    render={() => {
+	      return this.state.userCode ? (
+		<Redirect to={`/user/${this.state.userCode}`} />
+	      ) : (
+		this.renderHomePage()
+	      );
+	    }}
+	  />
+	  <Route path="/sorting" component={SortingPage} />
+	  <Route
+	    path="/user/:userCode"
+	    render={(props) => {
+	      return <User {...props} leaveRoomCallback={this.clearUserCode} />;
+	    }}
+	  />
+	  <Route path="/options" component={Options} />
+	</Switch>
       </Router>
     );
   }

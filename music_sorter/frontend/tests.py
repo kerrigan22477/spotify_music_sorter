@@ -8,5 +8,5 @@ class PostTests(TestCase):
         self.assertEqual(response.status_code, 200)
         response = self.client.get("/options")
         self.assertEqual(response.status_code, 200)
-        response = self.client.get("/room/123")
+        response = self.client.get("/user/123")
         self.assertEqual(response.status_code, 200)

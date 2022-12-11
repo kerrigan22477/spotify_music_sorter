@@ -6,7 +6,7 @@ from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
 from .util import *
-from api.models import Room
+from api.models import User
 import time
 
 # inherit from APIView
@@ -88,15 +88,15 @@ class IsAuthenticated(APIView):
 
 class UserPlaylists(APIView):
     def get(self, request, format=None, sortby=''):
-        room_code = self.request.session.get('room_code')
+        user_data = self.request.session.get('room_code')
 
         # get current room by looking through all Room objects for curr code
-        room = Room.objects.filter(code=room_code)
-        if room.exists():
-            room = room[0]
+        user = User.objects.filter(code=user_data)
+        if user.exists():
+            tmp = user[0]
         else:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
-        user = room.user
+        user = tmp.user
 
         # end point to access spotify user's playlist data
         get_playlists_endpoint = 'me/playlists'

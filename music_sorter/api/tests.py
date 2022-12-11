@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Room
+from .models import User
 
 # Create your tests here.
 
@@ -8,11 +8,11 @@ from .models import Room
 class PostTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.room = Room.objects.create()
-        cls.roomCode = cls.room.code
-        cls.user = cls.room.user
+        cls.user = User.objects.create()
+        cls.userCode = cls.user.code
+        cls.user = cls.user.user
 
     def test_model_content(self):
-        self.assertEqual(self.room.code, self.roomCode)
-        self.assertEqual(self.room.sorting_criteria, "key")
-        self.assertEqual(self.room.user, self.user)
+        self.assertEqual(self.user.code, self.userCode)
+        self.assertEqual(self.user.sorting_criteria, "key")
+        self.assertEqual(self.user.user, self.user)

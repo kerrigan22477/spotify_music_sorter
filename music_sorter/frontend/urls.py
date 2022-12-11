@@ -15,6 +15,6 @@ urlpatterns = [
     # named our path, so when we call redirect function we know where to go
     path('', index, name=''),
     path('sorting', index),
-    path('room/<str:roomCode>', index),
+    path('user/<str:userCode>', index),
     path('options', index)
 ]
