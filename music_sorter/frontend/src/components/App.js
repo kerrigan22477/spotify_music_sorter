@@ -30,5 +30,5 @@ export default class App extends Component {
 // renders our component inside our app div
 const appDiv = document.getElementById('app');
 // can pass in react props like this 
-// render(<App name='tim'/>, appDiv);
+// render(<App name='kevin'/>, appDiv);
 render(<App />, appDiv);

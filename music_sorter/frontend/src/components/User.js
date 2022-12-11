@@ -79,6 +79,7 @@ export default class User extends Component {
 		// sort before setting the state
 		// avoid changing state at all costs
 		// it is bad practice 
+		console.log(data)
 		const sorted = this.sortSongs(data)
 		this.setState({ playlists: sorted });
 	  });

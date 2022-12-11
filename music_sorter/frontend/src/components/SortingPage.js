@@ -66,7 +66,6 @@ export default class CreateRoomPage extends Component {
 			  <FormControlLabel value="danceability" control={<Radio />} label="Danceability" />
 			  <FormControlLabel value="energy" control={<Radio />} label="Energy" />
 			  <FormControlLabel value="key" control={<Radio />} label="Key" />
-			  <FormControlLabel value="mode" control={<Radio />} label="Mode" />
 			  <FormControlLabel value="valence" control={<Radio />} label="Valence" />
 			  <FormControlLabel value="tempo" control={<Radio />} label="Tempo" />
 			  <FormControlLabel value="instrumentalness" control={<Radio />} label="Instrumentalness" />

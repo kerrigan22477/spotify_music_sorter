@@ -17,7 +17,7 @@ export default class HomePage extends Component {
     this.state = {
       userCode: null,
     };
-    this.clearUserCode = this.clearRoomCode.bind(this);
+    this.clearUserCode = this.clearUserCode.bind(this);
   }
 
   // aasync tells program we don't need to wait for it to finish to do other stuff
@@ -53,7 +53,7 @@ export default class HomePage extends Component {
     );
   }
 
-  clearRoomCode() {
+  clearUserCode() {
     this.setState({
       userCode: null,
     });

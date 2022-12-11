@@ -26,7 +26,7 @@ class GetUser(APIView):
                 data = UserSerializer(user[0]).data
                 data['is_user'] = self.request.session.session_key == user[0].user
                 return Response(data, status=status.HTTP_200_OK)
-            return Response({'Room Not Found': 'Invalid Room Code.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'User Not Found': 'invalid user code'}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({'Bad Request': 'Code paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,18 +59,18 @@ class SortingPageView(APIView):
                 # when updating an object by resaving it, need to use
                 # this update fields method to force these fields to udpate
                 user.save(update_fields=['sorting_criteria',])
-                self.request.session['room_code'] = user.code
+                self.request.session['user_code'] = user.code
                 return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
             # if not updating the room create a new one! 
             else:
                 user = User(user=user, sorting_criteria=sorting_criteria)
                 user.save()
-                self.request.session['room_code'] = user.code
+                self.request.session['user_code'] = user.code
                 return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
             
             # return room by serializing it
-        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'Bad Request': 'invalid data'}, status=status.HTTP_400_BAD_REQUEST)
 
 # are they logged in and do we already have there info 
 class UserLoggedIn(APIView):
@@ -79,7 +79,7 @@ class UserLoggedIn(APIView):
             self.request.session.create()
 
         data = {
-            'code':self.request.session.get('room_code')
+            'code':self.request.session.get('user_code')
         }
         return JsonResponse(data, status=status.HTTP_200_OK)
 
@@ -87,9 +87,9 @@ class UserLoggedIn(APIView):
 class LeaveSorted(APIView):
     def post(self, request, format=None):
         # if user already logged in, 
-        if 'room_code' in self.request.session:
+        if 'user_code' in self.request.session:
             # get there info 
-            self.request.session.pop('room_code')
+            self.request.session.pop('user_code')
             user_id = self.request.session.session_key
             user_data = User.objects.filter(user=user_id)
             if len(user_data) > 0:
@@ -117,4 +117,4 @@ class UpdateSorted(APIView):
             user.save(update_fields=['sorting_criteria',])
             return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
-        return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'Bad Request': "invalid data"}, status=status.HTTP_400_BAD_REQUEST)

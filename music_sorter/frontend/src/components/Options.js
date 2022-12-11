@@ -19,30 +19,19 @@ import Rating from "@material-ui/lab/Rating";
 export default class Options extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      score: 5,
-      value: 5,
-    };
-  };
-
-  handelChange = (e) => {
-    this.setState({
-      score: parseFloat(e.target.value, 10),
-      value: parseFloat(e.target.value, 10),
-    });
   };
 
 
   renderOptions() {
-
     return (
+      <>
       <Grid container spacing={1}>
         <Grid style={{ maxHeight: 500, maxoverflowY: 'scroll' }} item xs={12} align="center">
           <TableContainer style={{ maxHeight: 500, maxoverflowY: 'scroll' }} component={Paper}>
             <Table stickyHeader aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Sorting Option</TableCell>
+                  <TableCell>Sorting Options</TableCell>
                   <TableCell align="right">Description</TableCell>
                 </TableRow>
               </TableHead>
@@ -67,7 +56,7 @@ export default class Options extends Component {
                 </TableRow>
                 <TableRow key={4} style={{ maxHeight: 600, maxoverflowY: 'scroll' }}>
                   <TableCell component="th" scope="row">
-                    Dancability
+                    Dancebility
                   </TableCell>
                   <TableCell align="right" style={{ width: 400 }}>Describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. We sort from low to high danceability.</TableCell>
                 </TableRow>
@@ -83,35 +72,21 @@ export default class Options extends Component {
                   </TableCell>
                   <TableCell align="right" style={{ width: 400 }}>The instrumentalness is the measure of vocals in a song, high instrumentalness will have a low ammount of vocals and visa versa. We sort from low to high instrumentalness.</TableCell>
                 </TableRow>
-                <TableRow key={7} style={{ maxHeight: 600, maxoverflowY: 'scroll' }}>
-                  <TableCell component="th" scope="row" >
-                    How well do you understand these options?
-                  </TableCell>
-                  <TableCell align="right">
-                    <Rating
-                      name="understanding"
-                      value={this.state.value}
-                      onChange={this.handelChange}
-                    />,
-                  </TableCell>
-                </TableRow>
-                <Button color="primary" to="/" component={Link}>
-                  Home
-                </Button>
               </TableBody>
             </Table>
           </TableContainer>
-
-
         </Grid>
+          <Grid item xs={12} align="center">
+            <Button color="secondary" variant="contained" to="/" component={Link}>
+              Home
+            </Button>
+          </Grid>
       </Grid>
+    </>
     )
   }
 
   render() {
-
-    return (this.renderOptions()
-
-    )
+    return this.renderOptions();
   }
 }

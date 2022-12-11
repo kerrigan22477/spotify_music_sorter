@@ -88,7 +88,7 @@ class IsAuthenticated(APIView):
 
 class UserPlaylists(APIView):
     def get(self, request, format=None, sortby=''):
-        user_data = self.request.session.get('room_code')
+        user_data = self.request.session.get('user_code')
 
         # get current room by looking through all Room objects for curr code
         user = User.objects.filter(code=user_data)
