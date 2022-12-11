@@ -22,7 +22,7 @@ export default class HomePage extends Component {
 
   // aasync tells program we don't need to wait for it to finish to do other stuff
   async componentDidMount() {
-    fetch("/api/user-in-room")
+    fetch("/api/user-logged-in")
       .then((response) => response.json())
       .then((data) => {
 	this.setState({

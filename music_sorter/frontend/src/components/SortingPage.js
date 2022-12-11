@@ -34,7 +34,7 @@ export default class CreateRoomPage extends Component {
 		sorting_criteria: this.state.sorting_criteria
 	  }),
 	};
-	fetch("/api/create-room", requestOptions)
+	fetch("/api/sorting-page", requestOptions)
 	  .then((response) => response.json())
 	  .then((data) => this.props.history.push("/user/" + data.code));
   }

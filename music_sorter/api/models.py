@@ -3,7 +3,7 @@ import string
 import random
 
 def generate_unique_code():
-    length = 6
+    length = 5
 
     while True:
         # generate random code of len=k w/ uppercase asci characters
@@ -13,7 +13,6 @@ def generate_unique_code():
         # #if not, break and return code 
         if User.objects.filter(code=code).count() == 0:
             break
-
     return code
 
 class User(models.Model):

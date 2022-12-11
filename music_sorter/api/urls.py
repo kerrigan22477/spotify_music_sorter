@@ -9,9 +9,9 @@ urlpatterns = [
     # redirect to UserView class, and make path the view from it 
     # this is what .as_view() does
     path('user', UserView.as_view()),
-    path('get-room', GetUser.as_view()),
-    path('create-room', SortingPageView.as_view()),
-    path('user-in-room', UserLoggedIn.as_view()),
-    path('leave-room', LeaveSorted.as_view()),
-    path('update-room', UpdateSorted.as_view())
+    path('get-user', GetUser.as_view()),
+    path('sorting-page', SortingPageView.as_view()),
+    path('user-logged-in', UserLoggedIn.as_view()),
+    path('leave-sorted', LeaveSorted.as_view()),
+    path('update-sorted', UpdateSorted.as_view())
 ]

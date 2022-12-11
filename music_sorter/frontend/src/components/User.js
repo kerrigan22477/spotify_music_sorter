@@ -31,7 +31,7 @@ export default class User extends Component {
   }
 
   getRoomDetails() {
-	return fetch("/api/get-room" + "?code=" + this.userCode)
+	return fetch("/api/get-user" + "?code=" + this.userCode)
 	  .then((response) => {
 		if (!response.ok) {
 		  this.props.leaveRoomCallback();
@@ -89,7 +89,7 @@ export default class User extends Component {
 	  method: "POST",
 	  headers: { "Content-Type": "application/json" },
 	};
-	fetch("/api/leave-room", requestOptions).then((_response) => {
+	fetch("/api/leave-sorted", requestOptions).then((_response) => {
 	  this.props.leaveRoomCallback();
 	  this.props.history.push("/sorting");
 	});
