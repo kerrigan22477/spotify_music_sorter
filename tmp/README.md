@@ -1,0 +1,1 @@
+Our project allows user's to learn more about their music by displaying explanations of basic music theory and allowing users to login to their Spotify accounts and select a sorting criteria to get more information about the songs they listen to and how they relate to one another. 

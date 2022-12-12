@@ -1,0 +1,1 @@
+The api app handles our project's api. views.py contains the code that renders our display, urls.py handles redirects to all our views, serializers.py takes the python code in our model and translates it into a json response, and models.py contains our User model. 

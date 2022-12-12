@@ -1,0 +1,1 @@
+This is the main app in our project. It contains the base url patterns used for navigating our website (these are expanded upon in our frontend app) and the settings for our django_project.

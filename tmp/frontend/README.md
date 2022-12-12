@@ -1,0 +1,1 @@
+This app holds the frontend of our project. it contains our css stylesheet, our index.html file, the url patterns for navigating our site, and each of our web components which all handle the display of the different pages in our website. 

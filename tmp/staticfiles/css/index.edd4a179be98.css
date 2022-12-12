@@ -1,0 +1,32 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#main {
+    /* our main div will be at top left hand corner and fill entire screen */
+    /* fixed position means no scrolling 
+    we manually add scrolling for our table in the sorted playlists page */ 
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+
+/* this style sheet is loaded by this line in our index.html file */
+/* href="{% static "css/index.css" %}" */

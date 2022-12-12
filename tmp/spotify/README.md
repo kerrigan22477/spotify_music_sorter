@@ -1,0 +1,1 @@
+This app handles all of the calls to the Spotify API, it contains our app's spotify credentials, our token and user models, the urls to handle our spotify redirect, along with all of the functions to grab data from spotify and help render it. 
